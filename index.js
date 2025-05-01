@@ -1,11 +1,22 @@
 const express = require('express');
+const cors = require('cors');
+const { getProduits } = require('./db');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Backend API is working on Azure!');
+  res.send('Backend API Azure en ligne !');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.get('/produits', async (req, res) => {
+  try {
+    const produits = await getProduits();
+    res.json(produits);
+  } catch (error) {
+    res.status(500).send('Erreur serveur');
+  }
 });
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Serveur lancé sur le port ${port}`));
