@@ -1,22 +1,23 @@
+// index.js
 const express = require('express');
-const cors = require('cors');
-const { getProduits } = require('./db');
+const { getProduits } = require('./db'); // assure-toi que ce fichier existe
 
 const app = express();
-app.use(cors());
+const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
-  res.send('Backend API Azure en ligne !');
+  res.send('Backend API is working on Azure!');
 });
 
 app.get('/produits', async (req, res) => {
   try {
     const produits = await getProduits();
     res.json(produits);
-  } catch (error) {
+  } catch (err) {
     res.status(500).send('Erreur serveur');
   }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Serveur lancé sur le port ${port}`));
+app.listen(port, () => {
+  console.log(`Serveur lancé sur le port ${port}`);
+});
