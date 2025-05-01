@@ -4,7 +4,13 @@ const { getProduits } = require('./db');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.get('/', async (req, res) => {
+// Route pour vérifier que le backend fonctionne
+app.get('/', (req, res) => {
+  res.send('Backend API is working on Azure!');
+});
+
+// Nouvelle route pour afficher les produits
+app.get('/produits', async (req, res) => {
   try {
     const produits = await getProduits();
     res.json(produits);
