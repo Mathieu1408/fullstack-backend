@@ -1,0 +1,37 @@
+const express = require('express');
+const sql = require('mssql');
+const app = express();
+const port = process.env.PORT || 8080;
+
+// Configuration Azure SQL
+const config = {
+  user: 'azureuser',
+  password: 'Azerty01!',
+  server: 'fullstack-sqlserver.database.windows.net',
+  database: 'FullStackDB',
+  options: {
+    encrypt: true,
+    trustServerCertificate: false
+  }
+};
+
+// Endpoint principal
+app.get('/', (req, res) => {
+  res.send('Backend API is working on Azure!');
+});
+
+// Endpoint pour les produits
+app.get('/api/produits', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const result = await sql.query('SELECT * FROM produits');
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Erreur SQL :', err);
+    res.status(500).send('Erreur serveur');
+  }
+});
+
+app.listen(port, () => {
+  console.log(`API listening on port ${port}`);
+});
